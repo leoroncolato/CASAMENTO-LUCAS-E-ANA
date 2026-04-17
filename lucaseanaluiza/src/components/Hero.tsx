@@ -2,37 +2,46 @@ export default function Hero() {
     return (
         <section className="relative min-h-screen flex flex-col items-center justify-center bg-[#FFFDF7] overflow-hidden px-6 text-center">
 
-            {/* Decoração de fundo — círculos de cor */}
-            <div className="absolute top-[-80px] left-[-80px] w-72 h-72 rounded-full bg-[#F9A852] opacity-20 blur-3xl" />
-            <div className="absolute bottom-[-60px] right-[-60px] w-64 h-64 rounded-full bg-[#91C494] opacity-20 blur-3xl" />
-            <div className="absolute top-1/2 right-[-40px] w-48 h-48 rounded-full bg-[#E94151] opacity-10 blur-2xl" />
+            {/* Foto de fundo */}
+            <div className="absolute inset-0 z-0">
+                <img
+                    src="/fotos/hero.jpg"
+                    alt="Lucas e Ana Luiza"
+                    className="w-full h-full object-cover object-center"
+                />
+                {/* Overlay gradiente */}
+                <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/50" />
+            </div>
 
             {/* Conteúdo */}
-            <p className="font-josefin text-xs uppercase tracking-[0.3em] text-[#F2502C] mb-4">
-                você está convidado
-            </p>
+            {/* Conteúdo */}
+            <div className="relative z-10 flex flex-col items-center">
+                <p className="font-josefin text-xs uppercase tracking-[0.3em] text-[#FCF59B] mb-4">
+                    você está convidado
+                </p>
 
-            <h1 className="font-seasons text-6xl md:text-8xl text-[#2D2D2D] leading-tight mb-2">
-                Lucas
-            </h1>
-            <p className="font-soria text-3xl md:text-4xl text-[#F2502C] mb-2">&</p>
-            <h1 className="font-seasons text-6xl md:text-8xl text-[#2D2D2D] leading-tight mb-8">
-                Ana Luíza
-            </h1>
+                <h1 className="font-seasons text-6xl md:text-8xl text-white leading-tight mb-2">
+                    Lucas
+                </h1>
+                <p className="font-soria text-3xl md:text-4xl text-[#F9A852] mb-2">&</p>
+                <h1 className="font-seasons text-6xl md:text-8xl text-white leading-tight mb-8">
+                    Ana Luiza
+                </h1>
 
-            <div className="flex flex-col sm:flex-row gap-6 text-center">
-                <div>
-                    <p className="font-josefin text-xs uppercase tracking-widest text-[#91C494]">Chá de Panela</p>
-                    <p className="font-josefin text-sm text-[#2D2D2D] mt-1">11 de Julho de 2026</p>
-                </div>
-                <div className="hidden sm:block w-px bg-[#CAD17A]" />
-                <div>
-                    <p className="font-josefin text-xs uppercase tracking-widest text-[#F2502C]">Casamento</p>
-                    <p className="font-josefin text-sm text-[#2D2D2D] mt-1">26 de Setembro de 2026</p>
+                <div className="flex flex-col sm:flex-row gap-6 text-center">
+                    <div>
+                        <p className="font-josefin text-xs uppercase tracking-widest text-[#91C494]">Chá de Panela</p>
+                        <p className="font-josefin text-sm text-white mt-1">11 de Julho de 2026</p>
+                    </div>
+                    <div className="hidden sm:block w-px bg-white/30" />
+                    <div>
+                        <p className="font-josefin text-xs uppercase tracking-widest text-[#F9A852]">Casamento</p>
+                        <p className="font-josefin text-sm text-white mt-1">26 de Setembro de 2026</p>
+                    </div>
                 </div>
             </div>
 
-           
+
             <a
                 href="#historia"
                 className="absolute bottom-10 animate-bounce text-[#CAD17A]"
