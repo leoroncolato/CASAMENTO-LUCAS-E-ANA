@@ -1,0 +1,6 @@
+SITE-CASAMENTO/*
+# Ignore all files in the SITE-CASAMENTO directory
+
+*.pdf
+*.txt
+
