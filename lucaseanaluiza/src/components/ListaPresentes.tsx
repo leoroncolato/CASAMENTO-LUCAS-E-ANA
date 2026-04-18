@@ -4,14 +4,16 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { Presente } from '@/types'
 
-const CATEGORIAS = ['Cozinha', 'Banheiro', 'Quarto', 'Dispensa', 'Sala']
+const CATEGORIAS = ['Cozinha', 'Banheiro', 'Quarto', 'Dispensa', 'Sala', 'Mimo/PIX']
 
 export default function ListaPresentes() {
   const [presentes, setPresentes] = useState<Presente[]>([])
   const [categoria, setCategoria] = useState<string>('Cozinha')
   const [loading, setLoading] = useState(true)
   const [escolhendo, setEscolhendo] = useState<string | null>(null)
-  const [nome, setNome] = useState('')
+  const [codigo, setCodigo] = useState('')
+  const [convidadoValidado, setConvidadoValidado] = useState<any>(null)
+  const [erroCodigo, setErroCodigo] = useState('')
   const [sucesso, setSucesso] = useState<string | null>(null)
 
   useEffect(() => {
@@ -22,43 +24,59 @@ export default function ListaPresentes() {
     const { data } = await supabase
       .from('presentes')
       .select('*')
-      .order('categoria')
+      .order('nome')
     if (data) setPresentes(data)
     setLoading(false)
   }
 
+  async function validarCodigo() {
+    setErroCodigo('')
+    const { data } = await supabase
+      .from('convidados')
+      .select('*')
+      .eq('codigo', codigo.trim().toUpperCase())
+      .single()
+
+    if (!data) {
+      setErroCodigo('Código não encontrado.')
+      return
+    }
+    setConvidadoValidado(data)
+  }
+
   async function escolherPresente(presente: Presente) {
-    if (!nome.trim()) return
+    if (!convidadoValidado) return
 
     if (presente.tipo === 'pix') {
-      setSucesso(`Obrigado, ${nome}! Você escolheu contribuir com ${presente.nome} via PIX 💚`)
+      setSucesso(`Obrigado, ${convidadoValidado.nome}! A chave PIX chegará em breve 💚`)
       setEscolhendo(null)
-      setNome('')
       return
     }
 
     const { error } = await supabase
-      .from('presentes')
-      .update({ disponivel: false, escolhido_por: null })
-      .eq('id', presente.id)
+    .from('presentes')
+    .update({ disponivel: false, nome_escolhido: convidadoValidado.nome })
+    .eq('id', presente.id)
 
     if (!error) {
       setPresentes(prev =>
-        prev.map(p => p.id === presente.id ? { ...p, disponivel: false } : p)
+        prev.map(p => p.id === presente.id
+          ? { ...p, disponivel: false, nome_escolhido: convidadoValidado.nome }
+          : p
+        )
       )
-      setSucesso(`Obrigado, ${nome}! Você escolheu: ${presente.nome} 🎁`)
+      setSucesso(`Obrigado, ${convidadoValidado.nome}! Você escolheu: ${presente.nome} 🎁`)
       setEscolhendo(null)
-      setNome('')
     }
   }
 
-  const presentesFiltrados = presentes.filter(p => p.categoria === categoria)
+  const presentesFiltrados = presentes
+    .filter(p => p.categoria === categoria)
 
   return (
     <section id="presentes" className="bg-[#FFFDF7] px-6 py-20 md:py-32">
       <div className="max-w-2xl mx-auto flex flex-col gap-10">
 
-        {/* Título */}
         <div className="text-center">
           <p className="font-josefin text-xs uppercase tracking-[0.3em] text-[#CAD17A] mb-3">
             nossa casa pode ter um pouquinho de você
@@ -68,7 +86,37 @@ export default function ListaPresentes() {
           </h2>
         </div>
 
-        {/* Filtro de categorias */}
+        {/* Validação de código */}
+        {!convidadoValidado ? (
+          <div className="flex flex-col gap-3 max-w-sm mx-auto w-full">
+            <p className="font-josefin text-sm text-[#2D2D2D] text-center">
+              Digite seu código para escolher um presente:
+            </p>
+            <input
+              type="text"
+              value={codigo}
+              onChange={e => { setCodigo(e.target.value); setErroCodigo('') }}
+              placeholder="Ex: ANA001"
+              className="font-josefin text-sm border border-[#CAD17A] rounded-xl px-4 py-3 bg-white outline-none focus:border-[#F2502C] text-center uppercase tracking-widest"
+            />
+            {erroCodigo && (
+              <p className="font-josefin text-xs text-[#C42311] text-center">{erroCodigo}</p>
+            )}
+            <button
+              onClick={validarCodigo}
+              disabled={!codigo.trim()}
+              className="font-josefin text-xs uppercase tracking-widest bg-[#F2502C] text-white py-3 rounded-full hover:bg-[#C42311] transition-colors disabled:opacity-40"
+            >
+              Continuar
+            </button>
+          </div>
+        ) : (
+          <p className="font-josefin text-sm text-center text-[#91C494]">
+            Olá, <strong>{convidadoValidado.nome}</strong>! Escolha seu presente 🎁
+          </p>
+        )}
+
+        {/* Filtro categorias */}
         <div className="flex flex-wrap gap-2 justify-center">
           {CATEGORIAS.map(cat => (
             <button
@@ -85,7 +133,6 @@ export default function ListaPresentes() {
           ))}
         </div>
 
-        {/* Sucesso */}
         {sucesso && (
           <div className="bg-[#CAD17A] text-[#2D2D2D] font-josefin text-sm px-6 py-4 rounded-2xl text-center">
             {sucesso}
@@ -95,13 +142,8 @@ export default function ListaPresentes() {
           </div>
         )}
 
-        {/* Lista */}
         {loading ? (
-          <p className="font-josefin text-sm text-center text-[#2D2D2D] opacity-50">Carregando...</p>
-        ) : presentesFiltrados.length === 0 ? (
-          <p className="font-josefin text-sm text-center text-[#2D2D2D] opacity-50">
-            Nenhum item nessa categoria ainda.
-          </p>
+          <p className="font-josefin text-sm text-center opacity-50">Carregando...</p>
         ) : (
           <div className="flex flex-col gap-4">
             {presentesFiltrados.map(presente => (
@@ -130,7 +172,7 @@ export default function ListaPresentes() {
                     )}
                   </div>
 
-                  {(presente.disponivel || presente.tipo === 'pix') && (
+                  {convidadoValidado && (presente.disponivel || presente.tipo === 'pix') && (
                     <button
                       onClick={() => setEscolhendo(presente.id)}
                       className="shrink-0 font-josefin text-xs uppercase tracking-widest bg-[#FCF59B] text-[#2D2D2D] px-4 py-2 rounded-full hover:bg-[#F9A852] transition-colors"
@@ -140,17 +182,11 @@ export default function ListaPresentes() {
                   )}
                 </div>
 
-                {/* Mini formulário inline */}
                 {escolhendo === presente.id && (
                   <div className="flex flex-col gap-2 pt-2 border-t border-[#F9CDBB]">
-                    <p className="font-josefin text-xs text-[#2D2D2D]">Seu nome:</p>
-                    <input
-                      type="text"
-                      value={nome}
-                      onChange={e => setNome(e.target.value)}
-                      placeholder="Como você se chama?"
-                      className="font-josefin text-sm border border-[#CAD17A] rounded-xl px-4 py-2 bg-transparent outline-none focus:border-[#F2502C]"
-                    />
+                    <p className="font-josefin text-xs text-[#2D2D2D]">
+                      Confirmar escolha de <strong>{presente.nome}</strong>?
+                    </p>
                     <div className="flex gap-2">
                       <button
                         onClick={() => escolherPresente(presente)}
@@ -159,7 +195,7 @@ export default function ListaPresentes() {
                         Confirmar
                       </button>
                       <button
-                        onClick={() => { setEscolhendo(null); setNome('') }}
+                        onClick={() => setEscolhendo(null)}
                         className="font-josefin text-xs uppercase tracking-widest text-[#2D2D2D] px-4 py-2 rounded-full border border-[#CAD17A] hover:border-[#F2502C] transition-colors"
                       >
                         Cancelar
@@ -171,7 +207,6 @@ export default function ListaPresentes() {
             ))}
           </div>
         )}
-
       </div>
     </section>
   )

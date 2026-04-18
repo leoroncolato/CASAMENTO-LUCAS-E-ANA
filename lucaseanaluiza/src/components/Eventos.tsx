@@ -32,8 +32,21 @@ export default function Eventos() {
           </h3>
           <div className="flex flex-col gap-1 font-josefin text-sm text-[#2D2D2D]">
             <p>📅 11 de Julho de 2026</p>
-            <p>📍 Chácara Planície</p>
+            <p>📍 Chácara Planície - GO-080 - Goiânia, GO</p>
           </div>
+          <a
+            href="https://maps.app.goo.gl/wCJKyhRaDVmp7RK1A"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 font-josefin text-xs uppercase tracking-widest text-[#F26522] hover:text-[#C42311] transition-colors"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
+              <circle cx="12" cy="9" r="2.5" />
+            </svg>
+            Ver no Google Maps
+          </a>
+
           <p className="font-josefin text-sm text-[#2D2D2D] leading-relaxed">
             Será nosso momento de reunir com quem amamos e celebrarmos o nosso início como Sr. e Sra. Sua presença é muito importante.
           </p>
