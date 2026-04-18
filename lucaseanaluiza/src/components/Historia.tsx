@@ -1,10 +1,13 @@
-import { Listra } from './Decoracoes'
+import { Listra, Gatinho, Laranja, RamoOliveira } from './Decoracoes'
 
 export default function Historia() {
   return (
     <section id="historia" className="bg-[#FFFDF7] px-6 py-20 md:py-32">
       <div className="max-w-2xl mx-auto flex flex-col gap-16">
-
+        {/* Decorações */}
+        <div className="absolute bottom-16 left-6 opacity-60 hidden md:block">
+            <RamoOliveira className="w-12 h-20" />
+        </div>
         {/* Bloco 1 */}
         <div className="flex flex-col gap-4">
           <p className="font-josefin text-base md:text-lg text-[#2D2D2D] leading-relaxed">
@@ -94,6 +97,14 @@ export default function Historia() {
             "A coisa mais extraordinária do mundo é o um homem comum, uma mulher comum e seus filhos comuns."
             <span className="block font-josefin text-xs uppercase tracking-widest text-[#CAD17A] mt-3">— G.K. Chesterton</span>
           </blockquote>
+        </div>
+
+        {/* Easter-Egg heheheheh */}
+        <div className="relative mt-8 flex justify-center">
+          <Laranja className="w-8 h-8 opacity-90" />
+          <div className="absolute bottom-0 right-6 opacity-10 hover:opacity-90 transition-opacity duration-500 cursor-default" title="🐱">
+            <Gatinho className="w-12 h-12" />
+          </div>
         </div>
 
       </div>

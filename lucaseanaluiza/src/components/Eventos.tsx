@@ -1,5 +1,4 @@
 import Countdown from './Countdown'
-import { Gatinho, Laranja } from './Decoracoes'
 
 export default function Eventos() {
   return (
@@ -100,13 +99,6 @@ export default function Eventos() {
 
       </div>
 
-      {/* Easter-Egg heheheheh */}
-      <div className="relative mt-8 flex justify-center">
-        <Laranja className="w-8 h-8 opacity-70" />
-        <div className="absolute bottom-0 right-6 opacity-10 hover:opacity-80 transition-opacity duration-500 cursor-default" title="🐱">
-          <Gatinho className="w-12 h-12" />
-        </div>
-      </div>
     </section>
   )
 }
