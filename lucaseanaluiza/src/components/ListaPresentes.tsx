@@ -54,9 +54,9 @@ export default function ListaPresentes() {
     }
 
     const { error } = await supabase
-    .from('presentes')
-    .update({ disponivel: false, nome_escolhido: convidadoValidado.nome })
-    .eq('id', presente.id)
+      .from('presentes')
+      .update({ disponivel: false, nome_escolhido: convidadoValidado.nome })
+      .eq('id', presente.id)
 
     if (!error) {
       setPresentes(prev =>
@@ -122,11 +122,10 @@ export default function ListaPresentes() {
             <button
               key={cat}
               onClick={() => setCategoria(cat)}
-              className={`font-josefin text-xs uppercase tracking-widest px-5 py-2 rounded-full border transition-colors ${
-                categoria === cat
+              className={`font-josefin text-xs uppercase tracking-widest px-5 py-2 rounded-full border transition-colors ${categoria === cat
                   ? 'bg-[#F2502C] text-white border-[#F2502C]'
                   : 'bg-transparent text-[#2D2D2D] border-[#CAD17A] hover:border-[#F2502C]'
-              }`}
+                }`}
             >
               {cat}
             </button>
@@ -149,12 +148,21 @@ export default function ListaPresentes() {
             {presentesFiltrados.map(presente => (
               <div
                 key={presente.id}
-                className={`rounded-2xl border p-5 flex flex-col gap-3 transition-opacity ${
-                  !presente.disponivel && presente.tipo !== 'pix'
+                className={`rounded-2xl border p-5 flex flex-col gap-3 transition-opacity ${!presente.disponivel && presente.tipo !== 'pix'
                     ? 'opacity-50 border-[#CAD17A]'
                     : 'border-[#F9CDBB] hover:border-[#F2502C]'
-                }`}
+                  }`}
               >
+
+                {presente.imagem_url && (
+                  <div className="w-full aspect-video rounded-xl overflow-hidden bg-[#F9CDBB]">
+                    <img
+                      src={presente.imagem_url}
+                      alt={presente.nome}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex flex-col gap-1">
                     <p className="font-josefin text-sm font-semibold text-[#2D2D2D]">

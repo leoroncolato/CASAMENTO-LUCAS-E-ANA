@@ -1,3 +1,5 @@
+import { Laranja, RamoOliveira } from './Decoracoes'
+
 export default function Hero() {
     return (
         <section className="relative min-h-screen flex flex-col items-center justify-center bg-[#FFFDF7] overflow-hidden px-6 text-center">
@@ -10,10 +12,10 @@ export default function Hero() {
                     className="w-full h-full object-cover object-center"
                 />
                 {/* Overlay gradiente */}
-                <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/50" />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/35 to-black/65" />
             </div>
 
-            {/* Conteúdo */}
+            
             {/* Conteúdo */}
             <div className="relative z-10 flex flex-col items-center">
                 <p className="font-josefin text-xs uppercase tracking-[0.3em] text-[#FCF59B] mb-4">
@@ -51,6 +53,15 @@ export default function Hero() {
                     <path d="M12 5v14M5 12l7 7 7-7" />
                 </svg>
             </a>
+
+
+            {/* Decorações */}
+            <div className="absolute bottom-16 left-6 opacity-60 hidden md:block">
+                <RamoOliveira className="w-12 h-20" />
+            </div>
+            <div className="absolute top-20 right-8 opacity-50 hidden md:block">
+                <Laranja className="w-10 h-10" />
+            </div>
 
         </section>
     );

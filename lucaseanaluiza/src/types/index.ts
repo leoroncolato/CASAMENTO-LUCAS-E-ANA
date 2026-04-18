@@ -24,4 +24,5 @@ export interface Presente {
   tipo: TipoPresente
   disponivel: boolean
   escolhido_por?: string
+  imagem_url?: string | null;
 }
